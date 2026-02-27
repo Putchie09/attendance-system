@@ -14,7 +14,10 @@ export const registerUser = async (req, res) => {
 
         const userId = await createUser({ name, password_hash, role_id });
         // Return the created user ID
-        res.status(201).json({ message: "User registered", userId });
+        res
+          .status(201)
+          .location(`/api/users/${userId}`)
+          .json({ id: userId, name, role_id });
     
     }catch (error) {
         console.error(error);
