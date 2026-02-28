@@ -1,5 +1,6 @@
 import { pool } from "../config/db.js";
 
+
 export const createUser = async ({ name, password_hash, role_id }) => {
   const [result] = await pool.query(
     "INSERT INTO user (name, password_hash, role_id, created_at) VALUES (?, ?, ?, NOW())",
@@ -7,6 +8,7 @@ export const createUser = async ({ name, password_hash, role_id }) => {
   );
   return result.insertId;
 };
+
 
 export const updateUserById = async ({
   id,
@@ -50,4 +52,21 @@ export const updateUserById = async ({
   const [result] = await pool.query(query, values);
 
   return result.affectedRows;
+};
+
+
+export const getUsers = async () => {
+  const [rows] = await pool.query(
+    "SELECT id, name, role_id, is_active FROM user",
+  );
+  return rows;
+};
+
+
+export const getUserById = async (id) => {
+  const [rows] = await pool.query(
+    "SELECT id, name, role_id, is_active FROM user WHERE id = ?",
+    [id],
+  );
+  return rows[0];
 };
