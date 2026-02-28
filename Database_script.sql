@@ -56,3 +56,7 @@ CREATE INDEX idx_attendance_user_recorded_at ON attendance(user_id, recorded_at)
 INSERT INTO role (name, created_at) VALUES
 ('Admin', NOW()),
 ('Employee', NOW());
+
+INSERT INTO attendance_type (name, created_at) VALUES
+('Clock-in', NOW()),
+('Clock-out', NOW());
