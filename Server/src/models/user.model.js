@@ -72,6 +72,14 @@ export const getUserById = async (id) => {
 };
 
 
+export const getUserByName = async (name) => {
+  const [rows] = await pool.query("SELECT * FROM user WHERE name = ? LIMIT 1", [
+    name,
+  ]);
+  return rows[0];
+};
+
+
 export const deleteUserById = async (id) => {
   const [result] = await pool.query("DELETE FROM user WHERE id = ?", [id]);
   return result.affectedRows;
