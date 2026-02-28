@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import userRoutes from './routes/user.routes.js';
+import roleRoutes from './routes/role.routes.js';
 
 const PORT = process.env.PORT || 5000;
 
@@ -14,6 +15,7 @@ app.use(express.json());
 
 //routes
 app.use('/api/users', userRoutes);
+app.use('/api/roles', roleRoutes);
 
 
 app.get('/', (req, res) => {

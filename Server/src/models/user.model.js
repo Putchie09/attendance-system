@@ -70,3 +70,9 @@ export const getUserById = async (id) => {
   );
   return rows[0];
 };
+
+
+export const deleteUserById = async (id) => {
+  const [result] = await pool.query("DELETE FROM user WHERE id = ?", [id]);
+  return result.affectedRows;
+};

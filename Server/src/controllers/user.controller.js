@@ -1,6 +1,11 @@
-import { createUser, updateUserById, getUsers, getUserById } from "../models/user.model.js";
+import {
+  createUser,
+  updateUserById,
+  getUsers,
+  getUserById,
+  deleteUserById
+} from "../models/user.model.js";
 import bcrypt from "bcrypt";
-
 
 export const registerUser = async (req, res) => {
   try {
@@ -24,7 +29,6 @@ export const registerUser = async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
-
 
 export const updateUser = async (req, res) => {
   try {
@@ -60,7 +64,6 @@ export const updateUser = async (req, res) => {
   }
 };
 
-
 export const listUsers = async (req, res) => {
   try {
     const users = await getUsers();
@@ -71,7 +74,6 @@ export const listUsers = async (req, res) => {
   }
 };
 
-
 export const getUser = async (req, res) => {
   try {
     const { id } = req.params;
@@ -80,6 +82,21 @@ export const getUser = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
     res.status(200).json(user);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const deleteUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const affectedRows = await deleteUserById(id);
+    // if no rows were affected, it means the user was not found
+    if (affectedRows === 0) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    res.status(200).json({ message: "User deleted" });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Internal server error" });
