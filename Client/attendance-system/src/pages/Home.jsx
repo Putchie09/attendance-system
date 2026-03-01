@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
 import { Lock, Clock, LogIn, LogOut } from "lucide-react";
 
-
 function Home() {
-  const [time, setTime] = useState(new Date());
+  const [time, setTime] = useState(null);
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   // Message states
@@ -16,23 +15,58 @@ function Home() {
 
   const ID_ENTRADA = 1;
 
+
+  const fetchServerTime = async () => {
+    try {
+      const response = await fetch("http://localhost:5000/api/server-time");
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch server time");
+      }
+
+      setTime(new Date(data.serverTime));
+    } catch (error) {
+      console.error("Error fetching server time:", error);
+    }
+  };
+
   useEffect(() => {
-    const interval = setInterval(() => {
-      setTime(new Date());
-    }, 1000);
-    return () => clearInterval(interval);
+    fetchServerTime();
   }, []);
 
-  const formattedTime = time.toLocaleTimeString("es-CR", {
-    hour12: false,
-  });
+  useEffect(() => {
+    if (!time) return;
 
-  const formattedDate = time.toLocaleDateString("es-CR", {
-    weekday: "long",
-    day: "2-digit",
-    month: "long",
-    year: "numeric",
-  });
+    const interval = setInterval(() => {
+      setTime((prev) => new Date(prev.getTime() + 1000));
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [time]);
+
+  useEffect(() => {
+    const syncInterval = setInterval(() => {
+      fetchServerTime();
+    }, 60000); // each 60s
+
+    return () => clearInterval(syncInterval);
+  }, []);
+
+  const formattedTime = time
+    ? time.toLocaleTimeString("es-CR", { hour12: false })
+    : "--:--:--";
+
+  const formattedDate = time
+    ? time.toLocaleDateString("es-CR", {
+        weekday: "long",
+        day: "2-digit",
+        month: "long",
+        year: "numeric",
+      })
+    : "";
+
+  
 
   const fetchActiveUsers = async () => {
     try {
@@ -111,7 +145,7 @@ function Home() {
           </div>
 
           <h1 className="text-6xl font-bold text-blue-950 tracking-wide">
-            {formattedTime}
+            {time ? formattedTime : "--:--:--"}
           </h1>
 
           <p className="text-gray-500 mt-2 capitalize">{formattedDate}</p>
@@ -168,7 +202,7 @@ function Home() {
         <div className="h-72 overflow-y-scroll custom-scroll pr-2 space-y-4">
           {activeUsers.map((user, index) => (
             <div key={index} className="flex items-center justify-end gap-2">
-              <div className="w-2 h-2 rounded-full bg-[rgb(var(--color-primary))]" />
+
               <span className="text-sm text-gray-700 font-medium">
                 {user.name}
               </span>
