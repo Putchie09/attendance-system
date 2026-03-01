@@ -51,6 +51,7 @@ CREATE TABLE attendance (
     app_user_id INT UNSIGNED NOT NULL,
     type ENUM('IN','OUT') NOT NULL,
     recorded_at DATETIME NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME NULL,
     updated_by INT UNSIGNED NULL,
 

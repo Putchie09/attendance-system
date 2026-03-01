@@ -1,34 +1,34 @@
 import { pool } from "../config/db.js";
 
-export const getTodayAttendance = async (user_id) => {
+export const getTodayAttendance = async (app_user_id) => {
   const [rows] = await pool.query(
     `
     SELECT id,
-           user_id,
-           type_id,
-           status,
+           app_user_id,
+           type,
            recorded_at,
-           created_at,
-           ip_address
+           updated_at,
+           updated_by
     FROM attendance
-    WHERE user_id = ?
-    AND DATE(recorded_at) = CURDATE()
+    WHERE app_user_id = ?
+      AND DATE(recorded_at) = CURDATE()
     ORDER BY recorded_at ASC
     `,
-    [user_id],
+    [app_user_id],
   );
 
   return rows;
 };
 
-export const createAttendance = async (user_id, type_id, ip_address) => {
+
+export const createAttendance = async (app_user_id, type) => {
   const [result] = await pool.query(
     `
     INSERT INTO attendance
-    (user_id, type_id, ip_address, recorded_at, created_at)
-    VALUES (?, ?, ?, NOW(), NOW())
+    (app_user_id, type, recorded_at)
+    VALUES (?, ?, NOW())
     `,
-    [user_id, type_id, ip_address],
+    [app_user_id, type],
   );
 
   return result.insertId;

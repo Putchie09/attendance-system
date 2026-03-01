@@ -112,10 +112,10 @@ function Home() {
         throw new Error(data.error || "Credenciales inválidas");
       }
 
-      const typeText = data.type_id === ID_ENTRADA ? "entrada" : "salida";
-
+      const typeText = data.type === "IN" ? "entrada" : "salida";
       setAttendanceType(typeText);
       setMessage(`${name}, ${typeText} registrada con éxito`);
+
       setName("");
       setPassword("");
 
@@ -224,7 +224,7 @@ function Home() {
           {activeUsers.map((user, index) => (
             <div key={index} className="flex items-center justify-end gap-2">
               <span className="text-sm text-gray-700 font-medium">
-                {user.name}
+                {user.username}
               </span>
             </div>
           ))}

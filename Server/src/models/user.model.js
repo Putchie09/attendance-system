@@ -88,6 +88,26 @@ export const getUsersCurrentlyCheckedIn = async () => {
   const [rows] = await pool.query(`
     SELECT u.username
     FROM app_user u
+    JOIN attendance a
+      ON u.id = a.app_user_id
+    WHERE a.recorded_at = (
+      SELECT MAX(recorded_at)
+      FROM attendance
+      WHERE app_user_id = a.app_user_id
+        AND DATE(recorded_at) = CURDATE()
+    )
+      AND a.type = 'IN'
+    ORDER BY u.username ASC
+  `);
+
+  return rows;
+};
+
+/*
+export const getUsersCurrentlyCheckedIn = async () => {
+  const [rows] = await pool.query(`
+    SELECT u.username
+    FROM app_user u
     JOIN (
         SELECT a.user_id, a.type_id
         FROM attendance a
@@ -107,3 +127,4 @@ export const getUsersCurrentlyCheckedIn = async () => {
 
   return rows;
 };
+*/

@@ -4,33 +4,30 @@ import {
 } from "../models/attendance.model.js";
 
 // comes from the databse
-const CLOCK_IN = 1;
-const CLOCK_OUT = 2;
+const CLOCK_IN = "IN";
+const CLOCK_OUT = "OUT";
 
 export const registerAttendance = async (req, res) => {
   try {
-    const user_id = req.user.id; // comes from auth middleware
+    const app_user_id = req.user.id; // desde el middleware de auth
 
-    const todayRecords = await getTodayAttendance(user_id);
+    const todayRecords = await getTodayAttendance(app_user_id);
 
-    let type_id;
+    let type;
 
     if (todayRecords.length === 0) {
-      type_id = CLOCK_IN;
+      type = CLOCK_IN;
     } else {
       const lastRecord = todayRecords[todayRecords.length - 1];
-
-      type_id = lastRecord.type_id === CLOCK_IN ? CLOCK_OUT : CLOCK_IN;
+      type = lastRecord.type === CLOCK_IN ? CLOCK_OUT : CLOCK_IN;
     }
 
-    const ip_address = req.ip;
-
-    const attendanceId = await createAttendance(user_id, type_id, ip_address);
+    const attendanceId = await createAttendance(app_user_id, type);
 
     res.status(201).json({
       id: attendanceId,
-      user_id,
-      type_id,
+      app_user_id,
+      type,
     });
   } catch (error) {
     console.error(error);
