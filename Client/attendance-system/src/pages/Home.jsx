@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Lock, Clock } from "lucide-react";
+import { Lock, Clock, LogIn, LogOut } from "lucide-react";
 
 
 function Home() {
@@ -9,6 +9,7 @@ function Home() {
   // Message states
   const [message, setMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [attendanceType, setAttendanceType] = useState(null); // "entrada" | "salida"
 
   const [activeUsers, setActiveUsers] = useState([]);
   const [loading, setLoading] = useState(false); // disable button while loading
@@ -54,34 +55,39 @@ function Home() {
     fetchActiveUsers();
   }, []);
 
-
   const handleSubmit = async () => {
     try {
       setLoading(true);
       setErrorMessage("");
       setMessage("");
+      setAttendanceType(null);
 
       const response = await fetch("http://localhost:5000/api/attendance", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, password }),
       });
 
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || "Failed to register attendance");
+        throw new Error(data.error || "Credenciales inválidas");
       }
 
       const typeText = data.type_id === ID_ENTRADA ? "entrada" : "salida";
 
-      setMessage(`Hola ${name}, ${typeText} registrada.`);
+      setAttendanceType(typeText);
+      setMessage(`${name}, ${typeText} registrada con éxito`);
       setName("");
       setPassword("");
-      await fetchActiveUsers(); // Refresh active users after attendance change
-      
+
+      await fetchActiveUsers();
+
+      // Clear message after 3 seconds (3000 ms)
+      setTimeout(() => {
+        setMessage("");
+        setAttendanceType(null);
+      }, 3000);
     } catch (error) {
       setErrorMessage(error.message);
     } finally {
@@ -142,14 +148,8 @@ function Home() {
             >
               {loading ? "Procesando..." : "Entrada / Salida"}
             </button>
-            {message && (
-              <p className="mt-4 text-green-600 font-medium text-center">
-                {message}
-              </p>
-            )}
-
             {errorMessage && (
-              <p className="mt-4 text-red-600 font-medium text-center">
+              <p className="mt-3 text-sm text-red-500 text-center">
                 {errorMessage}
               </p>
             )}
@@ -176,6 +176,49 @@ function Home() {
           ))}
         </div>
       </div>
+      {/* SUCCESS POPUP */}
+      {attendanceType && (
+        <div className="fixed top-10 inset-x-0 flex justify-center z-50 pointer-events-none">
+          <div className="flex items-center gap-5 bg-white/80 backdrop-blur-xl shadow-2xl rounded-2xl px-6 py-5 border border-gray-200 animate-toast min-w-[420px]">
+            {/* ICON CONTAINER */}
+            <div
+              className={`
+          flex items-center justify-center
+          w-14 h-14 rounded-xl
+          ${
+            attendanceType === "entrada"
+              ? "bg-emerald-500/15"
+              : "bg-rose-500/15"
+          }
+        `}
+            >
+              {attendanceType === "entrada" ? (
+                <LogIn size={26} className="text-emerald-600" />
+              ) : (
+                <LogOut size={26} className="text-rose-600" />
+              )}
+            </div>
+
+            {/* TEXT */}
+            <div>
+              <p
+                className={`text-xs uppercase tracking-widest font-medium ${
+                  attendanceType === "entrada"
+                    ? "text-emerald-600"
+                    : "text-rose-600"
+                }`}
+              >
+                {attendanceType === "entrada"
+                  ? "Entrada registrada"
+                  : "Salida registrada"}
+              </p>
+
+              <p className="text-lg font-semibold text-gray-800">{message}</p>
+            </div>
+          </div>
+        </div>
+      )}
+      {/**/}
     </div>
   );
 }

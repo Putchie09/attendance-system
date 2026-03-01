@@ -1,6 +1,5 @@
 import { pool } from "../config/db.js";
 
-
 export const createUser = async ({ name, password_hash, role_id }) => {
   const [result] = await pool.query(
     "INSERT INTO user (name, password_hash, role_id, created_at) VALUES (?, ?, ?, NOW())",
@@ -8,7 +7,6 @@ export const createUser = async ({ name, password_hash, role_id }) => {
   );
   return result.insertId;
 };
-
 
 export const updateUserById = async ({
   id,
@@ -54,14 +52,12 @@ export const updateUserById = async ({
   return result.affectedRows;
 };
 
-
 export const getUsers = async () => {
   const [rows] = await pool.query(
     "SELECT id, name, role_id, is_active FROM user",
   );
   return rows;
 };
-
 
 export const getUserById = async (id) => {
   const [rows] = await pool.query(
@@ -71,7 +67,6 @@ export const getUserById = async (id) => {
   return rows[0];
 };
 
-
 export const getUserByName = async (name) => {
   const [rows] = await pool.query("SELECT * FROM user WHERE name = ? LIMIT 1", [
     name,
@@ -79,8 +74,31 @@ export const getUserByName = async (name) => {
   return rows[0];
 };
 
-
 export const deleteUserById = async (id) => {
   const [result] = await pool.query("DELETE FROM user WHERE id = ?", [id]);
   return result.affectedRows;
+};
+
+export const getUsersCurrentlyCheckedIn = async () => {
+  const [rows] = await pool.query(`
+    SELECT u.name
+    FROM user u
+    JOIN (
+        SELECT a.user_id, a.type_id
+        FROM attendance a
+        JOIN (
+            SELECT user_id, MAX(recorded_at) as last_record
+            FROM attendance
+            WHERE DATE(recorded_at) = CURDATE()
+            GROUP BY user_id
+        ) last_att
+        ON a.user_id = last_att.user_id
+        AND a.recorded_at = last_att.last_record
+    ) final_att
+    ON u.id = final_att.user_id
+    WHERE final_att.type_id = 1
+    ORDER BY u.name ASC
+  `);
+
+  return rows;
 };

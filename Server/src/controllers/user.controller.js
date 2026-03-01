@@ -3,7 +3,8 @@ import {
   updateUserById,
   getUsers,
   getUserById,
-  deleteUserById
+  deleteUserById,
+  getUsersCurrentlyCheckedIn 
 } from "../models/user.model.js";
 import bcrypt from "bcrypt";
 
@@ -97,6 +98,16 @@ export const deleteUser = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
     res.status(200).json({ message: "User deleted" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const listUsersCurrentlyCheckedIn = async (req, res) => {
+  try {
+    const users = await getUsersCurrentlyCheckedIn();
+    res.status(200).json(users);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Internal server error" });
