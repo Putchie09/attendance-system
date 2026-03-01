@@ -1,28 +1,29 @@
 import { pool } from "../config/db.js";
 
-export const createUser = async ({ name, password_hash, role_id }) => {
+export const createUser = async ({ username, password_hash, pin_hash, role_id }) => {
   const [result] = await pool.query(
-    "INSERT INTO user (name, password_hash, role_id, created_at) VALUES (?, ?, ?, NOW())",
-    [name, password_hash, role_id],
+    "INSERT INTO app_user (username, password_hash, pin_hash, role_id, created_at) VALUES (?, ?, ?, ?, NOW())",
+    [username, password_hash, pin_hash, role_id],
   );
   return result.insertId;
 };
 
 export const updateUserById = async ({
   id,
-  name,
+  username,
   role_id,
   is_active,
   password_hash,
+  pin_hash,
 }) => {
-  let query = "UPDATE user SET ";
+  let query = "UPDATE app_user SET ";
   const fields = [];
   const values = [];
 
   // Only include fields that are provided in the request body
-  if (name !== undefined) {
-    fields.push("name = ?");
-    values.push(name);
+  if (username !== undefined) {
+    fields.push("username = ?");
+    values.push(username);
   }
 
   if (role_id !== undefined) {
@@ -39,6 +40,10 @@ export const updateUserById = async ({
     fields.push("password_hash = ?");
     values.push(password_hash);
   }
+  if (pin_hash !== undefined) {
+    fields.push("pin_hash = ?");
+    values.push(pin_hash);
+  }
 
   fields.push("updated_at = NOW()");
 
@@ -54,35 +59,35 @@ export const updateUserById = async ({
 
 export const getUsers = async () => {
   const [rows] = await pool.query(
-    "SELECT id, name, role_id, is_active FROM user",
+    "SELECT id, username, role_id, is_active FROM app_user",
   );
   return rows;
 };
 
 export const getUserById = async (id) => {
   const [rows] = await pool.query(
-    "SELECT id, name, role_id, is_active FROM user WHERE id = ?",
+    "SELECT id, username, role_id, is_active FROM app_user WHERE id = ?",
     [id],
   );
   return rows[0];
 };
 
-export const getUserByName = async (name) => {
-  const [rows] = await pool.query("SELECT * FROM user WHERE name = ? LIMIT 1", [
-    name,
+export const getUserByName = async (username) => {
+  const [rows] = await pool.query("SELECT * FROM app_user WHERE username = ? LIMIT 1", [
+    username,
   ]);
   return rows[0];
 };
 
 export const deleteUserById = async (id) => {
-  const [result] = await pool.query("DELETE FROM user WHERE id = ?", [id]);
+  const [result] = await pool.query("DELETE FROM app_user WHERE id = ?", [id]);
   return result.affectedRows;
 };
 
 export const getUsersCurrentlyCheckedIn = async () => {
   const [rows] = await pool.query(`
-    SELECT u.name
-    FROM user u
+    SELECT u.username
+    FROM app_user u
     JOIN (
         SELECT a.user_id, a.type_id
         FROM attendance a

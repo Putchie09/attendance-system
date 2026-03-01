@@ -10,21 +10,22 @@ import bcrypt from "bcrypt";
 
 export const registerUser = async (req, res) => {
   try {
-    const { name, password, role_id } = req.body;
+    const { username, password, pin, role_id } = req.body;
 
-    if (!name || !password || !role_id) {
+    if (!username || !password || !pin || !role_id) {
       return res.status(400).json({ message: "Missing required fields" });
     }
 
-    // encrypt password
+    // encrypt password and pin
     const password_hash = await bcrypt.hash(password, 10);
+    const pin_hash = await bcrypt.hash(pin, 10);
 
-    const userId = await createUser({ name, password_hash, role_id });
+    const userId = await createUser({ username, password_hash, pin_hash, role_id });
     // Return the created user ID
     res
       .status(201)
       .location(`/api/users/${userId}`)
-      .json({ id: userId, name, role_id });
+      .json({ id: userId, username, role_id });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Internal server error" });
@@ -34,12 +35,17 @@ export const registerUser = async (req, res) => {
 export const updateUser = async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, password, role_id, is_active } = req.body;
+    const { username, password, pin, role_id, is_active } = req.body;
 
-    if (!name && !password && !role_id && is_active === undefined) {
+    if (!username && !password && !pin && !role_id && is_active === undefined) {
       return res.status(400).json({ message: "Nothing to update" });
     }
 
+    // encrypt pin if provided a new one
+    let pin_hash;
+    if (pin) {
+      pin_hash = await bcrypt.hash(pin, 10);
+    }
     // encrypt password if provided a new one
     let password_hash;
     if (password) {
@@ -49,10 +55,11 @@ export const updateUser = async (req, res) => {
     // Update the user and check if any rows were affected
     const affectedRows = await updateUserById({
       id,
-      name,
+      username,
       role_id,
       is_active,
       password_hash,
+      pin_hash,
     });
     if (affectedRows === 0) {
       return res.status(404).json({ message: "User not found" });
