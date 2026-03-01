@@ -1,7 +1,11 @@
 import { useEffect, useState } from "react";
 import { Lock, Clock, LogIn, LogOut } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+
+
 
 function Home() {
+  const navigate = useNavigate();  
   const [time, setTime] = useState(null);
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
@@ -132,9 +136,26 @@ function Home() {
   return (
     <div className="h-screen bg-gray-100 relative overflow-hidden">
       {/* Admin button */}
-      <button className="absolute top-10 right-10 text-gray-500 hover:text-gray-700 transition z-20">
-        <Lock size={22} />
-      </button>
+      <div className="absolute top-10 right-10 z-20 group">
+        <button
+          onClick={() => navigate("/admin")}
+          className="relative p-3 rounded-xl transition hover: cursor-pointer"
+        >
+          {/* Fondo hover */}
+          <div className="absolute inset-0 rounded-xl bg-gray-200 opacity-0 group-hover:opacity-100 transition duration-200"></div>
+
+          {/* Icono */}
+          <Lock size={22} className="relative text-gray-600" />
+        </button>
+
+        {/* Tooltip */}
+        <div className="absolute right-0 mt-2 opacity-0 group-hover:opacity-100 transition pointer-events-none">
+          <div className="bg-gray-900 text-white text-xs px-3 py-2 rounded-lg shadow-lg relative">
+            Panel de administrador
+            <div className="absolute -top-1 right-4 w-2 h-2 bg-gray-900 rotate-45"></div>
+          </div>
+        </div>
+      </div>
 
       {/* CENTER CONTENT */}
       <div className="flex h-full items-center justify-center">
@@ -202,7 +223,6 @@ function Home() {
         <div className="h-72 overflow-y-scroll custom-scroll pr-2 space-y-4">
           {activeUsers.map((user, index) => (
             <div key={index} className="flex items-center justify-end gap-2">
-
               <span className="text-sm text-gray-700 font-medium">
                 {user.name}
               </span>
