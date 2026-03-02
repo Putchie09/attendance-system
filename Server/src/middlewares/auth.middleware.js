@@ -1,15 +1,55 @@
 import bcrypt from "bcrypt";
 import { getUserByName } from "../models/user.model.js";
 
-export const authenticateUser = async (req, res, next) => {
-  try {
-    const { name, password } = req.body;
+const ADMIN_ROLE_ID = 1;
 
-    if (!name || !password) {
-      return res.status(400).json({ error: "Name and password are required" });
+export const authenticateEmployeeByPin = async (req, res, next) => {
+  try {
+    const { username, pin } = req.body;
+
+    if (!username || !pin) {
+      return res.status(400).json({ error: "Username and PIN are required" });
     }
 
-    const user = await getUserByName(name);
+    const user = await getUserByName(username);
+
+    if (!user) {
+      return res.status(401).json({ error: "Invalid credentials" });
+    }
+
+    if (!user.is_active) {
+      return res.status(403).json({ error: "User is inactive" });
+    }
+
+    const validPin = await bcrypt.compare(pin, user.pin_hash);
+
+    if (!validPin) {
+      return res.status(401).json({ error: "Invalid credentials" });
+    }
+
+    req.user = {
+      id: user.id,
+      username: user.username,
+      role_id: user.role_id,
+    };
+
+    next();
+  } catch (error) {
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+export const authenticateAdmin = async (req, res, next) => {
+  try {
+    const { username, password } = req.body;
+
+    if (!username || !password) {
+      return res
+        .status(400)
+        .json({ error: "Username and password are required" });
+    }
+
+    const user = await getUserByName(username);
 
     if (!user) {
       return res.status(401).json({ error: "Invalid credentials" });
@@ -25,16 +65,19 @@ export const authenticateUser = async (req, res, next) => {
       return res.status(401).json({ error: "Invalid credentials" });
     }
 
-    //save authenticated user in request
+    // verify if user is admin
+    if (user.role_id !== ADMIN_ROLE_ID) {
+      return res.status(403).json({ error: "Forbidden" });
+    }
+
     req.user = {
       id: user.id,
-      name: user.name,
+      username: user.username,
       role_id: user.role_id,
     };
 
     next();
   } catch (error) {
-    console.error(error);
     res.status(500).json({ error: "Internal server error" });
   }
 };
