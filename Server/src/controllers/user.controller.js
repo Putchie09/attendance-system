@@ -4,7 +4,8 @@ import {
   getUsers,
   getUserById,
   deleteUserById,
-  getUsersCurrentlyCheckedIn 
+  getUsersCurrentlyCheckedIn,
+  getActiveUsersWithWorkingStatus,
 } from "../models/user.model.js";
 import bcrypt from "bcrypt";
 
@@ -20,7 +21,12 @@ export const registerUser = async (req, res) => {
     const password_hash = await bcrypt.hash(password, 10);
     const pin_hash = await bcrypt.hash(pin, 10);
 
-    const userId = await createUser({ username, password_hash, pin_hash, role_id });
+    const userId = await createUser({
+      username,
+      password_hash,
+      pin_hash,
+      role_id,
+    });
     // Return the created user ID
     res
       .status(201)
@@ -114,6 +120,16 @@ export const deleteUser = async (req, res) => {
 export const listUsersCurrentlyCheckedIn = async (req, res) => {
   try {
     const users = await getUsersCurrentlyCheckedIn();
+    res.status(200).json(users);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const listActiveUsersWithStatus = async (req, res) => {
+  try {
+    const users = await getActiveUsersWithWorkingStatus();
     res.status(200).json(users);
   } catch (error) {
     console.error(error);
