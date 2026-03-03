@@ -6,7 +6,7 @@ export function useServerTime() {
 
   const fetchServerTime = async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/server-time");
+      const res = await fetch("http://localhost:5000/api/time");
       const data = await res.json();
       setTime(new Date(data.serverTime));
     } catch {
