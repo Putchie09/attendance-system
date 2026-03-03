@@ -2,9 +2,9 @@ import express from "express";
 import cors from "cors";
 
 import userRoutes from "./modules/users/user.routes.js";
-import roleRoutes from "./routes/role.routes.js";
+import roleRoutes from "./modules/roles/role.routes.js";
 import attendanceRoutes from "./modules/attendance/attendance.routes.js";
-import settingsRoutes from "./routes/settings.routes.js";
+import settingsRoutes from "./modules/settings/settings.routes.js";
 import timeRoutes from "./modules/time/time.routes.js";
 
 const app = express();

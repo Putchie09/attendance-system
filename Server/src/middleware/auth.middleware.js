@@ -1,5 +1,5 @@
 import bcrypt from "bcrypt";
-import { getUserByName } from "../models/user.model.js";
+import { getUserByName } from "../modules/users/user.repository.js";
 
 export const authenticateEmployeeByPin = async (req, res, next) => {
   try {

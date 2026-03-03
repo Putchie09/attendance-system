@@ -1,4 +1,4 @@
-import { pool } from "../config/db.js";
+import { pool } from "../../config/db.js";
 
 export const getTodayAttendance = async (app_user_id) => {
   const [rows] = await pool.query(

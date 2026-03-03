@@ -5,7 +5,7 @@ import {
   getUserById,
   deleteUserById,
   getActiveUsersWithWorkingStatus,
-} from "../models/user.repository.js";
+} from "./user.repository.js";
 import bcrypt from "bcrypt";
 
 export const registerUser = async (req, res) => {

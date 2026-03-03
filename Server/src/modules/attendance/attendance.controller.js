@@ -1,7 +1,7 @@
 import {
   getTodayAttendance,
   createAttendance,
-} from "../models/attendance.repository.js";
+} from "./attendance.repository.js";
 
 // comes from the databse
 const CLOCK_IN = "IN";

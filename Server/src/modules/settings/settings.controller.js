@@ -1,4 +1,4 @@
-import { getTheme, updateTheme } from "../models/settings.repository.js";
+import { getTheme, updateTheme } from "./settings.repository.js";
 
 const allowedThemes = ["purple", "blue", "green", "orange", "rose"];
 
