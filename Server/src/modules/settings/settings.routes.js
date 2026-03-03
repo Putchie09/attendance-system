@@ -1,8 +1,6 @@
 import { Router } from "express";
-import {
-  getCurrentTheme,
-  setTheme,
-} from "./settings.controller.js";
+import { getCurrentTheme, setTheme } from "./settings.controller.js";
+
 
 // when we have auth
 // import { verifyToken } from "../middlewares/auth.middleware.js";

@@ -1,72 +1,33 @@
+import { asyncHandler } from "../../middleware/asyncHandler.js";
 import {
-  createRole,
-  updateRoleById,
-  getRoles,
-  getRoleById,
-  deleteRoleById,
-} from "./role.repository.js";
+  createRoleService,
+  updateRoleService,
+  listRolesService,
+  getRoleService,
+  deleteRoleService,
+} from "./role.service.js";
 
-export const registerRole = async (req, res) => {
-  try {
-    const { name } = req.body;
+export const registerRole = asyncHandler(async (req, res) => {
+  const role = await createRoleService(req.body.name);
+  res.status(201).json(role);
+});
 
-    const roleId = await createRole({ name });
-    const role = await getRoleById(roleId);
+export const updateRole = asyncHandler(async (req, res) => {
+  const role = await updateRoleService(req.params.id, req.body.name);
+  res.json(role);
+});
 
-    res.status(201).location(`/roles/${role.id}`).json(role);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
+export const listRoles = asyncHandler(async (req, res) => {
+  const roles = await listRolesService();
+  res.json(roles);
+});
 
-export const updateRole = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const { name } = req.body;
-    
-    const affectedRows = await updateRoleById({ id, name });
-    if (affectedRows === 0) {
-      return res.status(404).json({ error: "Role not found" });
-    }
+export const getRole = asyncHandler(async (req, res) => {
+  const role = await getRoleService(req.params.id);
+  res.json(role);
+});
 
-    const updatedRole = await getRoleById(id);
-    res.json(updatedRole);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
-
-export const listRoles = async (req, res) => {
-  try {
-    const roles = await getRoles();
-    res.json(roles);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
-
-export const getRole = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const role = await getRoleById(id);
-    if (!role) {
-      return res.status(404).json({ error: "Role not found" });
-    }
-    res.json(role);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
-
-export const deleteRole = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const affectedRows = await deleteRoleById(id);
-    if (affectedRows === 0) {
-      return res.status(404).json({ error: "Role not found" });
-    }
-    res.status(204).send();
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
+export const deleteRole = asyncHandler(async (req, res) => {
+  await deleteRoleService(req.params.id);
+  res.status(204).send();
+});
