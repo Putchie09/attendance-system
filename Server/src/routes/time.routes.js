@@ -1,6 +1,7 @@
 import { Router } from "express";
-const router = Router();
 import { getCurrentServerTime } from "../controllers/time.controller.js";
+
+const router = Router();
 
 router.get("/", getCurrentServerTime);
 

@@ -1,48 +1,36 @@
 @import "tailwindcss";
 
-/* colors*/
-
-/* amber - orange */
-/* :root {
-  --color-primary: 249 115 22;    /* orange-500
-  --color-primary-hover: 234 88 12;    /* orange-600
-  --color-primary-soft: 253 186 116;   /* orange-300
-} */
-
-
-/* green - emerald */
-/* :root {
-  --color-primary: 16 185 129;    /* emerald-500
-  --color-primary-hover: 5 150 105;    /* emerald-600 
-  --color-primary-soft: 110 231 183;   /* emerald-300
-} */
-
-
-/* blue - sky */
-/* :root {
-  --color-primary: 14 165 233;    /* sky-500
-  --color-primary-hover: 2 132 199;    /* sky-600
-  --color-primary-soft: 125 211 252;   /* sky-300
-} */
-
-/* indigo — SaaS standard*/
-/*
-:root {
-  --color-primary: 99 102 241;    /* indigo-500 
-  --color-primary-hover: 79 70 229;    /* indigo-600
-  --color-primary-soft: 165 180 252;   /* indigo-300 
+/* UI color themes */
+:root,
+:root[data-theme="purple"] {
+  --color-primary: 139 92 246;
+  --color-primary-hover: 124 58 237;
+  --color-primary-soft: 196 181 253;
 }
-*/
 
+:root[data-theme="blue"] {
+  --color-primary: 14 165 233;
+  --color-primary-hover: 2 132 199;
+  --color-primary-soft: 125 211 252;
+}
 
-/* purple - violet */
-:root {
-  --color-primary: 139 92 246;    /* violet-500 */
-  --color-primary-hover: 124 58 237;   /* violet-600 */
-  --color-primary-soft: 196 181 253;   /* violet-300 */
-} 
+:root[data-theme="green"] {
+  --color-primary: 16 185 129;
+  --color-primary-hover: 5 150 105;
+  --color-primary-soft: 110 231 183;
+}
 
+:root[data-theme="orange"] {
+  --color-primary: 249 115 22;
+  --color-primary-hover: 234 88 12;
+  --color-primary-soft: 253 186 116;
+}
 
+:root[data-theme="rose"] {
+  --color-primary: 244 63 94;     
+  --color-primary-hover: 225 29 72; 
+  --color-primary-soft: 253 164 175; 
+}
 
 
 /* animation for the form button */

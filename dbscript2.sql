@@ -69,6 +69,11 @@ CREATE TABLE attendance (
 );
 
 
+CREATE TABLE app_theme (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    theme VARCHAR(20) NOT NULL DEFAULT 'purple'
+);
+
 -- ======================
 -- INDEXES
 -- ======================
@@ -81,6 +86,7 @@ CREATE INDEX idx_attendance_recorded_at ON attendance(recorded_at);
 -- ======================
 -- Default Data
 -- ======================
+INSERT INTO app_theme (theme) VALUES ('purple');
 
 INSERT INTO role (name, created_at) VALUES
 ('Admin', NOW()),
