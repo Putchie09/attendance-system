@@ -9,7 +9,7 @@ const CLOCK_OUT = "OUT";
 
 export const registerAttendance = async (req, res) => {
   try {
-    const app_user_id = req.user.id; // desde el middleware de auth
+    const app_user_id = req.user.id; // from auth middleware
 
     const todayRecords = await getTodayAttendance(app_user_id);
 

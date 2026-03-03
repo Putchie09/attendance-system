@@ -20,7 +20,6 @@ export const getTodayAttendance = async (app_user_id) => {
   return rows;
 };
 
-
 export const createAttendance = async (app_user_id, type) => {
   const [result] = await pool.query(
     `

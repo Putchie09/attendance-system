@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 
+// gets current server time and keeps it updated every second, with periodic re-syncs
 export function useServerTime() {
   const [time, setTime] = useState(null);
 

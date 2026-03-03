@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 
+// gets list of active users with their current working status (IN/OUT)
 export function useUsers() {
   const [users, setUsers] = useState([]);
 
