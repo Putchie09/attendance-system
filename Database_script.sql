@@ -1,62 +1,93 @@
-CREATE DATABASE IF NOT EXISTS `attendance_system`;
 
+CREATE DATABASE IF NOT EXISTS `attendance_system`;
 USE `attendance_system`;
 
+-- ======================
+-- TABLE: role
+-- ======================
+
 CREATE TABLE role (
-    id INT AUTO_INCREMENT PRIMARY KEY,
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(50) NOT NULL UNIQUE,
     created_at DATETIME NOT NULL
 );
 
-CREATE TABLE user (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(100) NOT NULL,
-    password_hash VARCHAR(255) NOT NULL,
-    role_id INT NOT NULL,
-    is_active BOOLEAN NOT NULL DEFAULT TRUE,
-    created_at DATETIME NOT NULL,
-    updated_at DATETIME,
-    CONSTRAINT fk_user_role
-        FOREIGN KEY (role_id) REFERENCES role(id)
+
+-- ======================
+-- TABLE: app_user
+-- ======================
+
+CREATE TABLE app_user (
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(100) NOT NULL UNIQUE,
+    password_hash VARCHAR(255) NULL,
+    pin_hash VARCHAR(255) NOT NULL,
+    role_id INT UNSIGNED NOT NULL,
+    is_active TINYINT(1) NOT NULL DEFAULT 1,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    updated_by INT UNSIGNED NULL,
+
+    CONSTRAINT fk_app_user_role
+        FOREIGN KEY (role_id)
+        REFERENCES role(id)
+        ON UPDATE CASCADE
+        ON DELETE RESTRICT,
+
+    CONSTRAINT fk_app_user_updated_by
+        FOREIGN KEY (updated_by)
+        REFERENCES app_user(id)
+        ON UPDATE CASCADE
+        ON DELETE SET NULL
 );
 
-CREATE INDEX idx_user_role_id ON user(role_id);
 
-CREATE TABLE attendance_type (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(50) NOT NULL UNIQUE,
-    created_at DATETIME NOT NULL
-);
+-- ======================
+-- TABLE: attendance
+-- ======================
 
 CREATE TABLE attendance (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT NOT NULL,
-    type_id INT NOT NULL,
-    status TINYINT NOT NULL DEFAULT 1,
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    app_user_id INT UNSIGNED NOT NULL,
+    type ENUM('IN','OUT') NOT NULL,
     recorded_at DATETIME NOT NULL,
-    created_at DATETIME NOT NULL,
-    ip_address VARCHAR(45),
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME NULL,
+    updated_by INT UNSIGNED NULL,
+
     CONSTRAINT fk_attendance_user
-        FOREIGN KEY (user_id) REFERENCES user(id),
-    CONSTRAINT fk_attendance_type
-        FOREIGN KEY (type_id) REFERENCES attendance_type(id)
+        FOREIGN KEY (app_user_id)
+        REFERENCES app_user(id)
+        ON UPDATE CASCADE
+        ON DELETE RESTRICT,
+
+    CONSTRAINT fk_attendance_updated_by
+        FOREIGN KEY (updated_by)
+        REFERENCES app_user(id)
+        ON UPDATE CASCADE
+        ON DELETE SET NULL
 );
 
-CREATE INDEX idx_attendance_user_id ON attendance(user_id);
-CREATE INDEX idx_attendance_type_id ON attendance(type_id);
-CREATE INDEX idx_attendance_recorded_at ON attendance(recorded_at);
-CREATE INDEX idx_attendance_user_recorded_at ON attendance(user_id, recorded_at);
 
-/* 
-##############################
-    Insert default roles
-##############################
-*/
+CREATE TABLE app_theme (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    theme VARCHAR(20) NOT NULL DEFAULT 'purple'
+);
+
+-- ======================
+-- INDEXES
+-- ======================
+
+CREATE INDEX idx_attendance_user ON attendance(app_user_id);
+CREATE INDEX idx_attendance_recorded_at ON attendance(recorded_at);
+
+
+
+-- ======================
+-- Default Data
+-- ======================
+INSERT INTO app_theme (theme) VALUES ('purple');
 
 INSERT INTO role (name, created_at) VALUES
 ('Admin', NOW()),
 ('Employee', NOW());
-
-INSERT INTO attendance_type (name, created_at) VALUES
-('Clock-in', NOW()),
-('Clock-out', NOW());

@@ -39,9 +39,9 @@ export const updateUserService = async (id, data) => {
 
   // Validate that at least one field is provided for update
   if (
-    !username &&
-    !password &&
-    !pin &&
+    username === undefined &&
+    password === undefined &&
+    pin === undefined &&
     role_id === undefined &&
     is_active === undefined
   ) {
