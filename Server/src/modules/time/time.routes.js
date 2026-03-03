@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getCurrentServerTime } from "../controllers/time.controller.js";
+import { getCurrentServerTime } from "./time.controller.js";
 
 const router = Router();
 

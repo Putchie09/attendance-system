@@ -1,4 +1,4 @@
-import { pool } from "../config/db.js";
+import { pool } from "../../config/db.js";
 
 export const createRole = async ({ name }) => {
   const [result] = await pool.query(

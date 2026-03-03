@@ -1,4 +1,4 @@
-import { getServerTime } from "../models/time.model.js";
+import { getServerTime } from "../models/time.repository.js";
 
 export async function getCurrentServerTime(req, res) {
   try {

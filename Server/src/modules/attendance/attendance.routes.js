@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import { registerAttendance } from '../controllers/attendance.controller.js';
-import { authenticateEmployeeByPin } from "../middlewares/auth.middleware.js";
+import { registerAttendance } from './attendance.controller.js';
+import { authenticateEmployeeByPin } from "../../middleware/auth.middleware.js";
 
 const router = Router();
 

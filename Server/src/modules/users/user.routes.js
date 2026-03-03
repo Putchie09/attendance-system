@@ -6,7 +6,7 @@ import {
   getUser,
   deleteUser,
   listActiveUsersWithStatus,
-} from "../controllers/user.controller.js";
+} from "./user.controller.js";
 
 const router = Router();
 

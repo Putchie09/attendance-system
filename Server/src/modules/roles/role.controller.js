@@ -4,7 +4,7 @@ import {
   getRoles,
   getRoleById,
   deleteRoleById,
-} from "../models/role.model.js";
+} from "../models/role.repository.js";
 
 export const registerRole = async (req, res) => {
   try {

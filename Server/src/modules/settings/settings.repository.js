@@ -1,4 +1,4 @@
-import { pool } from "../config/db.js";
+import { pool } from "../../config/db.js";
 
 export const getTheme = async () => {
   const [rows] = await pool.query("SELECT theme FROM app_theme WHERE id = 1");
