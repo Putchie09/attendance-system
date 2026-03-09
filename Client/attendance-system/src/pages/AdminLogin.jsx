@@ -10,8 +10,39 @@ function AdminLogin() {
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
-  const handleLogin = () => {
-    // TODO: implement auth
+  const handleLogin = async () => {
+    if (!username || !password) {
+      setErrorMessage("Complete todos los campos");
+      return;
+    }
+
+    setLoading(true);
+    setErrorMessage("");
+
+    try {
+      const res = await fetch("http://localhost:5000/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setErrorMessage(data.error || "Credenciales incorrectas");
+        return;
+      }
+
+      // save token and user data
+      localStorage.setItem("admin_token", data.token);
+      localStorage.setItem("admin_user", JSON.stringify(data.user));
+
+      navigate("/admin/dashboard");
+    } catch {
+      setErrorMessage("No se pudo conectar con el servidor");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleKeyDown = (e) => {

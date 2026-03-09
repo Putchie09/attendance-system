@@ -1,4 +1,11 @@
 @import "tailwindcss";
+/* Poppins font */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+.font-poppins {
+  font-family: 'Poppins', sans-serif;
+}
+
 
 /* UI color themes */
 :root,
@@ -137,4 +144,37 @@
 
 .animate-modal-out {
   animation: modal-out 0.2s ease-in forwards;
+}
+
+
+
+/* Sidebar nav item hover/active con color primario dinámico */
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #6b7280;
+  text-decoration: none;
+  transition: background 0.18s ease, color 0.18s ease;
+}
+
+.nav-item svg {
+  color: #9ca3af;
+  transition: color 0.18s ease;
+  flex-shrink: 0;
+}
+
+.nav-item:hover,
+.nav-item.active {
+  background: rgb(var(--color-primary) / 0.1);
+  color: rgb(var(--color-primary));
+}
+
+.nav-item:hover svg,
+.nav-item.active svg {
+  color: rgb(var(--color-primary));
 }

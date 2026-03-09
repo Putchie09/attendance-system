@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import { verifyToken, requireAdmin } from "../../middleware/auth.middleware.js";
 import {
   registerUser,
   updateUser,
@@ -10,14 +11,14 @@ import {
 
 const router = Router();
 
-router.post('/', registerUser);
-router.patch('/:id', updateUser);
+router.post('/', verifyToken, requireAdmin, registerUser);
+router.patch("/:id", verifyToken, requireAdmin, updateUser);
 
 router.get("/status", listActiveUsersWithStatus);
 
 router.get('/:id', getUser);
-router.get('/', listUsers);
-router.delete('/:id', deleteUser);
+router.get("/", verifyToken, requireAdmin, listUsers);
+router.delete("/:id", verifyToken, requireAdmin, deleteUser);
 
 
 export default router;

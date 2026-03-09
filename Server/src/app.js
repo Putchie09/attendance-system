@@ -7,6 +7,7 @@ import attendanceRoutes from "./modules/attendance/attendance.routes.js";
 import settingsRoutes from "./modules/settings/settings.routes.js";
 import timeRoutes from "./modules/time/time.routes.js";
 import { notFound, errorHandler } from "./middleware/error.middleware.js";
+import authRoutes from "./modules/auth/auth.routes.js";
 
 const app = express();
 
@@ -18,6 +19,7 @@ app.use("/api/roles", roleRoutes);
 app.use("/api/attendance", attendanceRoutes);
 app.use("/api/settings", settingsRoutes);
 app.use("/api/time", timeRoutes);
+app.use("/api/auth", authRoutes);
 
 
 app.use(notFound);

@@ -17,11 +17,14 @@ export const registerUserService = async ({
   pin,
   role_id,
 }) => {
-  if (!username || !password || !pin || !role_id) {
+  if (!username || !pin || !role_id) {
     throw new AppError("Missing required fields", 400);
   }
 
-  const password_hash = await bcrypt.hash(password, SALT_ROUNDS);
+  const password_hash = password
+    ? await bcrypt.hash(password, SALT_ROUNDS)
+    : await bcrypt.hash(crypto.randomUUID(), SALT_ROUNDS); // hash placeholder
+
   const pin_hash = await bcrypt.hash(pin, SALT_ROUNDS);
 
   const userId = await createUser({
