@@ -4,7 +4,7 @@ import Home from "./pages/Home";
 import AdminLogin from "./pages/AdminLogin";
 import AdminLayout from "./pages/admin/AdminLayout";
 import Dashboard from "./pages/admin/Dashboard";
-import Registros from "./pages/admin/Registros";
+import Attendance from "./pages/admin/Attendance";
 import Jornadas from "./pages/admin/Jornadas";
 import Usuarios from "./pages/admin/Usuarios";
 import Roles from "./pages/admin/Roles";
@@ -43,7 +43,7 @@ function App() {
           }
         >
           <Route path="dashboard" element={<Dashboard />} />
-          <Route path="registros" element={<Registros />} />
+          <Route path="attendance" element={<Attendance />} />
           <Route path="jornadas" element={<Jornadas />} />
           <Route path="usuarios" element={<Usuarios />} />
           <Route path="roles" element={<Roles />} />

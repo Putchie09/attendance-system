@@ -12,7 +12,7 @@ import {
 
 const navItems = [
   { label: "Dashboard", icon: LayoutDashboard, to: "/admin/dashboard" },
-  { label: "Registros", icon: ClipboardList, to: "/admin/registros" },
+  { label: "Registros", icon: ClipboardList, to: "/admin/attendance" },
   { label: "Jornadas", icon: CalendarClock, to: "/admin/jornadas" },
   { label: "Usuarios", icon: Users, to: "/admin/usuarios" },
   { label: "Roles", icon: ShieldCheck, to: "/admin/roles" },

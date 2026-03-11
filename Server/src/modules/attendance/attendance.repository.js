@@ -32,3 +32,19 @@ export const createAttendance = async (app_user_id, type) => {
 
   return result.insertId;
 };
+
+export const getAllAttendance = async () => {
+  const [rows] = await pool.query(`
+    SELECT 
+      a.id,
+      u.username AS usuario,
+      a.type AS tipo,
+      DATE_FORMAT(a.recorded_at,'%d/%m/%Y') AS fecha,
+      DATE_FORMAT(a.recorded_at,'%H:%i') AS hora
+    FROM attendance a
+    JOIN app_user u ON u.id = a.app_user_id
+    ORDER BY a.recorded_at DESC
+  `);
+
+  return rows;
+};

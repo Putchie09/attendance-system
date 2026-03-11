@@ -3,6 +3,7 @@ import {
   createAttendance,
 } from "./attendance.repository.js";
 import { AppError } from "../../middleware/AppError.js";
+import { getAllAttendance } from "./attendance.repository.js";
 
 const CLOCK_IN = "IN";
 const CLOCK_OUT = "OUT";
@@ -30,4 +31,9 @@ export const registerAttendanceService = async (userId) => {
     app_user_id: userId,
     type,
   };
+};
+
+
+export const getAllAttendanceService = async () => {
+  return await getAllAttendance();
 };
