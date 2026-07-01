@@ -15,7 +15,7 @@ The goal is to let employees register their clock in and clock out with a PIN, a
 - **JWT authentication** — admin routes are protected with token-based authentication.
 
 ## Tech Stack
-
+- **React**  — Frontend
 - **Node.js** + **Express** — REST API
 - **MySQL** — database
 - **jsonwebtoken** — authentication
