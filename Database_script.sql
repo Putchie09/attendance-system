@@ -101,3 +101,102 @@ VALUES (
   1,
   NOW()
 );
+
+
+
+
+-- =========================================
+-- EMPLOYEES
+-- PIN: 111
+-- Without password
+-- =========================================
+
+INSERT INTO app_user (
+    username,
+    password_hash,
+    pin_hash,
+    role_id,
+    is_active,
+    created_at
+)
+VALUES
+(
+    'Juan Campos',
+    NULL,
+    '12345',
+    (SELECT id FROM role WHERE name = 'Employee'),
+    1,
+    NOW()
+),
+(
+    'Maria Lopez',
+    NULL,
+    '12345',
+    (SELECT id FROM role WHERE name = 'Employee'),
+    1,
+    NOW()
+),
+(
+    'Carlos Ramirez',
+    NULL,
+    '12345',
+    (SELECT id FROM role WHERE name = 'Employee'),
+    1,
+    NOW()
+),
+(
+    'Andrea Mora',
+    NULL,
+    '12345',
+    (SELECT id FROM role WHERE name = 'Employee'),
+    1,
+    NOW()
+),
+(
+    'Luis Fernandez',
+    NULL,
+    '12345',
+    (SELECT id FROM role WHERE name = 'Employee'),
+    1,
+    NOW()
+),
+(
+    'Sofia Herrera',
+    NULL,
+    '12345',
+    (SELECT id FROM role WHERE name = 'Employee'),
+    1,
+    NOW()
+),
+(
+    'Daniel Vargas',
+    NULL,
+    '12345',
+    (SELECT id FROM role WHERE name = 'Employee'),
+    1,
+    NOW()
+),
+(
+    'Valeria Castro',
+    NULL,
+    '12345',
+    (SELECT id FROM role WHERE name = 'Employee'),
+    1,
+    NOW()
+),
+(
+    'Jose Aguilar',
+    NULL,
+    '12345',
+    (SELECT id FROM role WHERE name = 'Employee'),
+    1,
+    NOW()
+),
+(
+    'Fernanda Rojas',
+    NULL,
+    '12345',
+    (SELECT id FROM role WHERE name = 'Employee'),
+    1,
+    NOW()
+)
