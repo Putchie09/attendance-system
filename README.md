@@ -49,6 +49,10 @@ npm start      # production
 
 ![App preview](./Preview02.png)
 
+![App preview](./Preview03.png)
+
+![App preview](./Preview04.png)
+
 ## Status
 
 This project is under active development.
