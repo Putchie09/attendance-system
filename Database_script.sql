@@ -91,3 +91,13 @@ INSERT INTO app_theme (theme) VALUES ('purple');
 INSERT INTO role (name, created_at) VALUES
 ('Admin', NOW()),
 ('Employee', NOW());
+
+INSERT INTO app_user (username, password_hash, pin_hash, role_id, is_active, created_at)
+VALUES (
+  'admin',
+  '$2b$10$J7/qybD4/80oAyAMXG904eTd62rQZQA4IZGdCCbqg3FVRRkVioG.W', -- admin123
+  '$2b$10$EUgA4g4bVp5zK9f49klYuOaZTOL3k26IZJh7dFCqpMEhYGuftDcEi', -- pin: 0000 (dummy)
+  1,
+  1,
+  NOW()
+);
