@@ -48,3 +48,19 @@ export const getAllAttendance = async () => {
 
   return rows;
 };
+
+// Trae todos los registros IN/OUT de una fecha específica (yyyy-mm-dd),
+// crudos (sin formatear), para poder calcular horas trabajadas en el service.
+export const getAttendanceByDate = async (dateStr) => {
+  const [rows] = await pool.query(
+    `
+    SELECT a.id, a.app_user_id, a.type, a.recorded_at
+    FROM attendance a
+    WHERE DATE(a.recorded_at) = ?
+    ORDER BY a.recorded_at ASC
+    `,
+    [dateStr],
+  );
+
+  return rows;
+};

@@ -62,7 +62,7 @@ function AdminLogin() {
           </div>
           <div>
             <p className="text-xl font-bold text-gray-900 leading-tight">
-              TimeKeep
+              Registro de Asistencia
             </p>
             <p className="text-sm text-gray-400">Panel de administrador</p>
           </div>

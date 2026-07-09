@@ -9,6 +9,8 @@ import {
   ShieldCheck,
   AlertTriangle,
 } from "lucide-react";
+import { Pagination } from "../../components/Pagination";
+import { PAGE_SIZE } from "../../constants/ui";
 
 const API = "http://localhost:5000/api/roles";
 const authHeaders = () => ({
@@ -167,6 +169,7 @@ function Roles() {
   const [delRole, setDelRole] = useState(null);
   const [showCreate, setShowCreate] = useState(false);
   const [toast, setToast] = useState(null);
+  const [page, setPage] = useState(1);
 
   const fetchRoles = async () => {
     try {
@@ -202,12 +205,15 @@ function Roles() {
     showToast("success", "Rol eliminado");
   };
 
+  const totalPages = Math.max(1, Math.ceil(roles.length / PAGE_SIZE));
+  const paginated = roles.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+
   return (
-    <div className="max-w-3xl">
-      {/* Header */}
-      <div className="flex items-center justify-between mb-6">
+    <div className="flex flex-col h-full overflow-hidden max-w-3xl">
+      {/* Header — fijo */}
+      <div className="shrink-0 flex items-center justify-between mb-4">
         <div>
-          <h1 className="font-poppins text-2xl font-bold text-gray-900 mb-0.5">
+          <h1 className="font-poppins text-xl font-bold text-gray-900 mb-0.5">
             Roles
           </h1>
           <p className="text-xs text-gray-400 font-poppins">
@@ -225,10 +231,10 @@ function Roles() {
         </button>
       </div>
 
-      {/* Tabla */}
-      <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden">
+      {/* Tabla con scroll interno */}
+      <div className="flex-1 bg-white rounded-2xl border border-gray-200 overflow-hidden flex flex-col min-h-0">
         {loading ? (
-          <div className="divide-y divide-gray-100">
+          <div className="divide-y divide-gray-100 overflow-y-auto">
             {[...Array(3)].map((_, i) => (
               <div key={i} className="flex items-center gap-4 px-6 py-5">
                 <div className="w-8 h-8 rounded-xl bg-gray-100 animate-pulse" />
@@ -237,7 +243,7 @@ function Roles() {
             ))}
           </div>
         ) : roles.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-16">
+          <div className="flex flex-col items-center justify-center flex-1">
             <div
               className="w-12 h-12 rounded-xl flex items-center justify-center mb-3"
               style={{ background: "rgb(var(--color-primary) / 0.08)" }}
@@ -256,8 +262,8 @@ function Roles() {
           </div>
         ) : (
           <>
-            {/* Cabecera */}
-            <div className="grid grid-cols-12 px-6 py-3 border-b border-gray-100 bg-gray-50">
+            {/* Cabecera fija */}
+            <div className="shrink-0 grid grid-cols-12 px-6 py-3 border-b border-gray-100 bg-gray-50">
               <span className="col-span-2 text-[11px] font-semibold text-gray-400 font-poppins uppercase tracking-wide">
                 ID
               </span>
@@ -267,9 +273,9 @@ function Roles() {
               <span className="col-span-3" />
             </div>
 
-            {/* Filas */}
-            <div className="divide-y divide-gray-100">
-              {roles.map((role) => (
+            {/* Filas con scroll */}
+            <div className="overflow-y-auto custom-scroll flex-1 divide-y divide-gray-100">
+              {paginated.map((role) => (
                 <div
                   key={role.id}
                   className="grid grid-cols-12 items-center px-6 py-4 hover:bg-gray-50 transition"
@@ -312,6 +318,15 @@ function Roles() {
                 </div>
               ))}
             </div>
+
+            <Pagination
+              page={page}
+              totalPages={totalPages}
+              totalItems={roles.length}
+              pageSize={PAGE_SIZE}
+              onPageChange={setPage}
+              itemLabel={roles.length === 1 ? "rol" : "roles"}
+            />
           </>
         )}
       </div>

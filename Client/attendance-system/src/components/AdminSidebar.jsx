@@ -40,7 +40,7 @@ function AdminSidebar() {
   };
 
   return (
-    <aside className="font-poppins w-[220px] min-h-screen bg-white border-r border-gray-100 flex flex-col px-4 py-7 shrink-0">
+    <aside className="font-poppins w-[220px] h-screen bg-white border-r border-gray-100 flex flex-col px-4 py-7 shrink-0 overflow-y-auto custom-scroll">
       {/* Logo */}
       <div className="flex items-center gap-3 px-1 mb-8">
         <div
@@ -51,7 +51,7 @@ function AdminSidebar() {
         </div>
         <div>
           <p className="text-base font-bold text-gray-900 leading-tight">
-            TimeKeep
+            Panel de administrador
           </p>
           <p className="text-[11px] text-gray-400 leading-tight">
             {getFormattedDate()}

@@ -69,7 +69,7 @@ function Ajustes() {
   const hasChanges = selected !== currentTheme;
 
   return (
-    <div className="max-w-xl">
+    <div className="max-w-xl h-full overflow-y-auto custom-scroll">
       {/* Título */}
       <div className="mb-8">
         <h1 className="font-poppins text-2xl font-bold text-gray-900 mb-1">

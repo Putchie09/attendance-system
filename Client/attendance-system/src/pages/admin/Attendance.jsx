@@ -2,16 +2,15 @@ import { useState, useEffect, useMemo } from "react";
 import {
   Pencil,
   ClipboardList,
-  ChevronLeft,
-  ChevronRight,
   LogIn,
   LogOut,
   Search,
   X,
 } from "lucide-react";
+import { Pagination } from "../../components/Pagination";
+import { PAGE_SIZE } from "../../constants/ui";
 
 const ATTENDANCE_API = "http://localhost:5000/api/attendance";
-const PAGE_SIZE = 12;
 
 const authHeaders = () => ({
   "Content-Type": "application/json",
@@ -320,82 +319,14 @@ function Attendance() {
             </div>
 
             {/* ── Paginación ── */}
-            {totalPages > 1 && (
-              <div className="shrink-0 flex items-center justify-between px-6 py-2 border-t border-gray-100 bg-gray-50">
-                <p className="text-xs text-gray-400 font-poppins">
-                  Mostrando{" "}
-                  <span className="text-gray-600 font-medium">
-                    {(page - 1) * PAGE_SIZE + 1}–
-                    {Math.min(page * PAGE_SIZE, filtered.length)}
-                  </span>{" "}
-                  de{" "}
-                  <span className="text-gray-600 font-medium">
-                    {filtered.length}
-                  </span>{" "}
-                  registros
-                </p>
-
-                <div className="flex items-center gap-1">
-                  <button
-                    onClick={() => setPage((p) => Math.max(1, p - 1))}
-                    disabled={page === 1}
-                    className="w-8 h-8 flex items-center justify-center rounded-lg text-gray-400 hover:text-gray-700 hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed transition cursor-pointer"
-                  >
-                    <ChevronLeft size={15} />
-                  </button>
-
-                  {/* Números de página */}
-                  {Array.from({ length: totalPages }, (_, i) => i + 1)
-                    .filter(
-                      (n) =>
-                        n === 1 || n === totalPages || Math.abs(n - page) <= 1,
-                    )
-                    .reduce((acc, n, idx, arr) => {
-                      if (idx > 0 && n - arr[idx - 1] > 1) {
-                        acc.push("...");
-                      }
-                      acc.push(n);
-                      return acc;
-                    }, [])
-                    .map((item, idx) =>
-                      item === "..." ? (
-                        <span
-                          key={`ellipsis-${idx}`}
-                          className="w-8 h-8 flex items-center justify-center text-xs text-gray-400 font-poppins"
-                        >
-                          …
-                        </span>
-                      ) : (
-                        <button
-                          key={item}
-                          onClick={() => setPage(item)}
-                          className="w-8 h-8 flex items-center justify-center rounded-lg text-xs font-medium font-poppins transition cursor-pointer"
-                          style={
-                            page === item
-                              ? {
-                                  background: "rgb(var(--color-primary))",
-                                  color: "#fff",
-                                }
-                              : {
-                                  color: "rgb(107 114 128)",
-                                }
-                          }
-                        >
-                          {item}
-                        </button>
-                      ),
-                    )}
-
-                  <button
-                    onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-                    disabled={page === totalPages}
-                    className="w-8 h-8 flex items-center justify-center rounded-lg text-gray-400 hover:text-gray-700 hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed transition cursor-pointer"
-                  >
-                    <ChevronRight size={15} />
-                  </button>
-                </div>
-              </div>
-            )}
+            <Pagination
+              page={page}
+              totalPages={totalPages}
+              totalItems={filtered.length}
+              pageSize={PAGE_SIZE}
+              onPageChange={setPage}
+              itemLabel="registros"
+            />
           </>
         )}
       </div>

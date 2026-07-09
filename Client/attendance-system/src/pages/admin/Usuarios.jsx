@@ -11,6 +11,8 @@ import {
   Eye,
   EyeOff,
 } from "lucide-react";
+import { Pagination } from "../../components/Pagination";
+import { PAGE_SIZE } from "../../constants/ui";
 
 const API = "http://localhost:5000/api/users";
 const ROLES_API = "http://localhost:5000/api/roles";
@@ -375,6 +377,7 @@ function Usuarios() {
   const [showCreate, setShowCreate] = useState(false);
   const [toast, setToast] = useState(null);
   const [search, setSearch] = useState("");
+  const [page, setPage] = useState(1);
 
   const fetchData = async () => {
     try {
@@ -424,14 +427,22 @@ function Usuarios() {
     u.username.toLowerCase().includes(search.toLowerCase()),
   );
 
+  // Resetear página al cambiar la búsqueda
+  useEffect(() => {
+    setPage(1);
+  }, [search]);
+
+  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+  const paginated = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+
   return (
     // Contenedor que ocupa exactamente el alto disponible sin overflow externo
-    <div className="flex flex-col h-[calc(100vh-73px)]">
+    <div className="flex flex-col h-full overflow-hidden">
       {/* Header + buscador — fijos */}
       <div className="shrink-0 mb-4">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h1 className="font-poppins text-2xl font-bold text-gray-900 mb-0.5">
+            <h1 className="font-poppins text-xl font-bold text-gray-900 mb-0.5">
               Usuarios
             </h1>
             <p className="text-xs text-gray-400 font-poppins">
@@ -520,7 +531,7 @@ function Usuarios() {
 
             {/* Filas con scroll */}
             <div className="overflow-y-auto custom-scroll flex-1 divide-y divide-gray-100">
-              {filtered.map((user) => (
+              {paginated.map((user) => (
                 <div
                   key={user.id}
                   className="grid grid-cols-12 items-center px-6 py-4 hover:bg-gray-50 transition"
@@ -579,6 +590,15 @@ function Usuarios() {
                 </div>
               ))}
             </div>
+
+            <Pagination
+              page={page}
+              totalPages={totalPages}
+              totalItems={filtered.length}
+              pageSize={PAGE_SIZE}
+              onPageChange={setPage}
+              itemLabel={filtered.length === 1 ? "usuario" : "usuarios"}
+            />
           </>
         )}
       </div>
